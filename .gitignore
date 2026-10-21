@@ -24,3 +24,21 @@
 __pycache__/
 *.egg-info
 /dist
+
+# xsim artefacts (see sim/README.md)
+sim/xsim.dir/
+sim/*.jou
+sim/*.log
+sim/*.pb
+sim/*.wdb
+sim/records.hex
+# xsim run from the repo root rather than sim/
+/xsim.dir/
+/xvlog.*
+/xelab.*
+/xsim.*
+
+# Vivado batch-run noise at the repo root
+/vivado*.log
+/vivado*.jou
+/.Xil/

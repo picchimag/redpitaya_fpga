@@ -68,6 +68,19 @@ readable) -- just re-run the same command and it will normally pass. Seen
 during both `make_project.tcl` and `build.tcl`; a single retry has always
 cleared it.
 
+## Check a config against its wrapper
+
+```
+python scripts/check_regmap.py rtl/trig_logger_axi_wrap.v ../redpitaya_control/config/trig_logger.json trig_logger
+```
+
+Confirms every `offset` in the config JSON lands on the register index the
+Verilog wrapper actually uses (`regs[N]` is at offset `4*N`). Nothing else
+enforces that, and a register moved in the HDL but not in the JSON reads
+plausible rubbish rather than failing -- which is what
+`Fix MCA timestamp IIR and FIR addresses` was. Run it after touching either
+side. Exits non-zero on a mismatch, so it drops straight into a pre-commit hook.
+
 ## Everyday workflow
 
 - **New design:** regenerate (or GUI Save As) a starting project, edit the block

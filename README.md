@@ -2,8 +2,9 @@
 
 Custom digital-signal-processing designs for the Red Pitaya (Zynq **xc7z010clg400-1**,
 Vivado **2024.1**), based on Pavel Demin's template flow. Filters (IIR/FIR),
-PID, integrator, multichannel-analyzer (peak finder + histogram) and streaming
-front-ends, each built as a Vivado block design around shared RTL.
+PID, integrator, multichannel-analyzer (peak finder + histogram), event and
+trigger loggers, and streaming front-ends, each built as a Vivado block design
+around shared RTL.
 
 Python control, bitfiles and register maps live in the companion repo
 **redpitaya_control**.
@@ -18,6 +19,7 @@ constr/    XDC constraints: pin map (ports), clocks, timing relaxation
 projects/  One folder per design. Only projects/<name>/bd.tcl is tracked -- the
            block-design recipe. All Vivado-generated files are gitignored.
 scripts/   Headless Tcl to export / regenerate / build projects (see scripts/README.md)
+sim/       Self-checking testbenches, run with Vivado's xsim (see sim/README.md)
 ```
 
 ## Source of truth
@@ -49,6 +51,17 @@ See [scripts/README.md](scripts/README.md) for the full commands. In short:
   once that project is captured.
 - The register addresses in each block design's Address Editor are the source
   of the `base` addresses in the `redpitaya_control` JSON configs — keep the two
-  in sync when you move a register.
+  in sync when you move a register. `scripts/check_regmap.py` verifies that for
+  you -- it reads the register indices out of an AXI wrapper's HDL and compares
+  them against a config JSON's offsets.
+
+How-to for the block-design edits that come up most often (creating ports,
+enabling an aux analog input or a DIO pin, what makes `ports.xdc` actually
+bind): [docs/vivado_howto.md](docs/vivado_howto.md).
+
+Per-design notes live in `docs/`: [docs/mca_timestamp.md](docs/mca_timestamp.md)
+(MCA + microsecond event logger) and
+[docs/trig_logger.md](docs/trig_logger.md) (digitally triggered 3-input logger
+-- boxcar energy, piezo direction, DIO trigger).
 
 See `TASKS.md` and `LESSONSLEARNED.md` for ongoing work and gotchas.
