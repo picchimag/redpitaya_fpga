@@ -220,8 +220,8 @@ dev = redpitaya_dev("171.64.56.120", "config/trig_logger.json")
 dev.base.load_bitfile()
 
 log = TrigLogger(dev)
-log.configure(n_avg=256,        # boxcar samples, power of two, <= 2048
-              n_delay_us=5.0,   # trigger -> energy latch
+log.configure(n_avg=4,          # boxcar samples, power of two, <= 2048
+              n_delay=16,       # CYCLES, trigger -> energy latch (16 = 128 ns)
               dir_thr=0.1,      # +/- volts on IN2; outside = +1/-1, inside = 0
               trig_sel=0,       # exp_p[0]
               flush_ms=100)
